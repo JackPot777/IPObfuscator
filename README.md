@@ -1,6 +1,12 @@
 # IPObfuscator
 
-A simple tool to convert the IP to different obfuscated forms 
+A simple tool to convert the IP to different obfuscated forms.
+
+It's a remastered version of [Osanda's IPObfuscator](https://github.com/OsandaMalith/IPObfuscator)
+with patch from [1lastBr3ath](https://github.com/1lastBr3ath).
+
+IPObfuscator now can be useful to create a wordlist of obfuscated IP's for ... your needs.
+Also it allows custom prefix and postfix for IP address.
 
 ## Usage
 
@@ -16,7 +22,7 @@ Usage: ./ip <ip> [prefix] [postfix]
 ```
 ## Example
 
-Create obfuscated IP address for testing bogon filtering:
+Create obfuscated IP addresses for testing, for example, a bogon filtering:
 
 ```
 ./ip 127.0.0.1 https://
