@@ -1,133 +1,226 @@
+// See LICENSE file for copyright and license details.
+//
+// Danger! Danger! Danger!
+// Crappy code here!
+//
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-/*
- * License:
- * This work is licensed under the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License. 
- * To view a copy of this license, visit http://creativecommons.org/licenses/by-nc-sa/4.0/.
- * Author: Osanda Malith Jayathissa 
- * Website: http://osandamalith.wordpress.com
- */
-void banner() {
-  fflush(stdin);
-  const static char *banner = 
-"\t\t\t---------------------------------\n"
-"\t\t\t    Welcome to IP Obfuscator     \n"
-"\t\t\t     Coded by @OsandaMalith		\n"
-"\t\t\thttp://osandamalith.wordpress.com\n"
-"\t\t\t---------------------------------\n";
-  for(banner; *banner; ++banner) fprintf(stdout, "%c", *banner);            
+void
+usage(char *program_name)
+{
+	printf("Usage: %s <ip> [prefix] [postfix]\n", program_name);
+	exit(0);
 }
 
-int isValidIp(char *str) {
-    int segs = 0;    
-    int chcnt = 0;   
-    int accum = 0;   
-
-    if (!str) return 0;
-
-    while (*str) {
-        if (*str == '.') {
-            if (!chcnt) return 0;
-            if (++segs == 4) return 0;
-            chcnt = accum = 0;
-            str++;
-            continue;
-        }
-        if ((*str < '0') || (*str > '9')) return 0;
-        if ((accum = accum * 10 + *str - '0') > 255) return 0;
-        chcnt++;
-        str++;
-    }
-    if (segs != 3) return 0;
-    if (!chcnt) return 0;
-    return 1;
+void
+die(char *msg)
+{
+	fprintf(stderr, "[!] Error: %s!\n", msg);
+	exit(-1);
 }
 
-int main(){
-	banner();
-	size_t i;
-	char ip[100], *token;
-	unsigned int dec[3];
-	const char deli[2] = ".";
-	const char *http = "[+] http://";
+void
+banner()
+{
+	const static char *banner =
+	" ---------------------------------------------------------------------\n"
+	"                 Welcome to IPObfuscator                              \n"
+	"                                                                      \n"
+	"  Coded by       @OsandaMalith  (http://osandamalith.wordpress.com)   \n"
+	"                 @1lastBr3ath   (http://cm2.pw)                       \n"
+	"  Remastered by  @chinarulezzz  (https://github.com/chinarulezzz)     \n"
+	" ---------------------------------------------------------------------\n";
 
-	printf("\n[+] Enter your IP: ");
-	fgets(ip, sizeof(ip), stdin);
-	strtok(ip, "\n");
-	
-	if(!isValidIp(ip)) {
-		fprintf(stderr,"%s","[!] Enter a valid ip\n");
-		exit(-1);
+	printf(banner);
+}
+
+_Bool
+valid(char *ip)
+{
+	int segs = 0, chcnt = 0, accum = 0;
+
+	while (*ip)
+	{
+		if (*ip == '.')
+		{
+			if (!chcnt)
+				return 0;
+
+			if (++segs == 4)
+				return 0;
+
+			chcnt = accum = 0;
+			ip++;
+			continue;
+		}
+
+		if ((*ip < '0') || (*ip > '9'))
+			return 0;
+
+		if ((accum = accum * 10 + *ip - '0') > 255)
+			return 0;
+
+		chcnt++;
+		ip++;
 	}
-	token = strtok(ip, deli);
+
+	if (segs != 3)
+		return 0;
+
+	if (!chcnt)
+		return 0;
+
+	return 1;
+}
+
+int
+main(int argc, char **argv)
+{
+	if (argc < 2
+	||  strcmp(argv[1], "-h")      == 0
+	||  strcmp(argv[1], "--help")  == 0
+	) {
+		banner();
+		usage(argv[0]);
+	}
+
+	char ip[100]      = {0},
+	     prefix[100]  = {0},
+	     postfix[100] = {0};
+	char *token;
+	unsigned int dword, dec[3];
+
+	strncpy(ip, argv[1], 100);
+
+	if (argc >= 3)
+		strncpy(prefix,  argv[2], 100);
+	if (argc == 4)
+		strncpy(postfix, argv[3], 100);
+
+	if (! valid(ip))
+		die("invalid IP address");
+
+	token = strtok(ip, ".");
 	
-	for(i=0; token; i++){
+	for (size_t i = 0; token; i++) {
 		*(dec+i) = atoi(token);
-		token = strtok(NULL, deli);
+		token = strtok(NULL, ".");
 	}
-	
 
-	puts("\n[~] Obfuscated IPs :\n");
-	printf("[+] http://%u\n\n",(*dec << 24)|(*(dec+1) << 16)|(*(dec+2) << 8)|*(dec+3));
-	printf("%s", http);
-	for(i=0;i<4;i++) printf( i == 3 ? "0x%02X\n" : "0x%02X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++) printf( i == 3 ? "%04o\n" : "%04o.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++) printf( i == 3 ? "0x%010X\n" : "0x%010X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++) printf( i == 3 ? "%010o\n\n" : "%010o.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++) printf( i == 3 ? "%i\n" :"0x%02X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++)
-		printf( i >= 2 ? i == 3 ? "%i\n" : "%i." : "0x%02X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++)
-		printf( i >= 1 ? i == 3 ? "%i\n\n" : "%i." : "0x%02X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++) printf( i == 3 ? "%i\n" :"%04o.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++)
-		printf( i >= 2 ? i == 3 ? "%i\n" : "%i." : "%04o.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++)
-		printf( i >= 1 ? i == 3 ? "%i\n\n" : "%i." : "%04o.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++) 
-		if(i < 2) printf("0x%02X.",dec[i]);
-		printf("%u\n", (*(dec+2) << 8)|*(dec+3));
-	printf("%s", http);
-	for(i=0;i<4;i++) 
-		if(i < 2) printf("%04o.",dec[i]);
-		printf("%u\n", (*(dec+2) << 8)|*(dec+3));
-	printf("%s", http);
-	for(i=0;i<2;i++)
-		printf( i >= 1 ? "%04o." : "0x%02X.",dec[i]);
-		printf("%u\n", (*(dec+2) << 8)|*(dec+3));
-	printf("%s", http);
-	for(i=0;i<4;i++) 
-		if(i < 1) printf("0x%02X.",dec[i]);
-		printf("%u\n", (*(dec+1) << 16)|(*(dec+2) << 8)|*(dec+3));
-	printf("%s", http);
-	for(i=0;i<4;i++) 
-		if(i < 1) printf("%04o.",dec[i]);
-		printf("%u\n", (*(dec+1) << 16)|(*(dec+2) << 8)|*(dec+3));
-	printf("%s", http);
-	for(i=0;i<4;i++)
-		printf( i >= 2 ? i == 3 ? "%04o\n" : "%04o." : "0x%02X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<4;i++)
-		printf( i >= 1 ? i == 3 ? "%04o\n" : "%04o." : "0x%02X.",dec[i]);
-	printf("%s", http);
-	for(i=0;i<2;i++)
-		printf( i >= 1 ? "%04o." : "0x%02X.",dec[i]);
-		printf("%u\n",(*(dec+2) << 8)|*(dec+3));
 
-#ifndef __unix__ 
+#define pprefix  { if (prefix)  printf("%s",   prefix); }
+#define ppostfix { if (postfix) printf("%s\n", postfix); else printf("\n"); }
+
+	pprefix;
+	printf("%u", dword=(*dec << 24)|(*(dec+1) << 16)|(*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+	pprefix; printf("0x%X",dword); ppostfix;
+	pprefix; printf("0%o",dword);  ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i == 3 ? "0x%02X" : "0x%02X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i == 3 ? "%04o" : "%04o.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i == 3 ? "0x%010X" : "0x%010X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i == 3 ? "%010o" : "%010o.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i == 3 ? "%i" :"0x%02X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i >= 2 ? i == 3 ? "%i" : "%i." : "0x%02X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i >= 1 ? i == 3 ? "%i" : "%i." : "0x%02X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i == 3 ? "%i" :"%04o.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i >= 2 ? i == 3 ? "%i" : "%i." : "%04o.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i >= 1 ? i == 3 ? "%i" : "%i." : "%04o.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		if (i < 2) printf("0x%02X.", dec[i]);
+	printf("%u", (*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		if (i < 2) printf("%04o.", dec[i]);
+	printf("%u", (*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i <2;i++)
+		printf( i >= 1 ? "%04o." : "0x%02X.", dec[i]);
+	printf("%u", (*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		if (i < 1) printf("0x%02X.", dec[i]);
+	printf("%u", (*(dec+1) << 16)|(*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		if (i < 1) printf("%04o.", dec[i]);
+	printf("%u", (*(dec+1) << 16)|(*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i >= 2 ? i == 3 ? "%04o" : "%04o." : "0x%02X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i < 4; i++)
+		printf( i >= 1 ? i == 3 ? "%04o" : "%04o." : "0x%02X.", dec[i]);
+	ppostfix;
+
+	pprefix;
+	for (size_t i = 0; i <2;i++)
+		printf( i >= 1 ? "%04o." : "0x%02X.", dec[i]);
+	printf("%u", (*(dec+2) << 8)|*(dec+3));
+	ppostfix;
+
+#ifndef __unix__
 	system("pause > nul");
 #endif
 	return 0;
 }
+
+// vim:sw=2:ts=2:sts=2:noet:cc=80
+// End of file
