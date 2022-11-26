@@ -1,11 +1,13 @@
-# IPObfuscator
+# ipobfs
 
 A simple tool to convert the IP to different obfuscated forms.
 
-It's a remastered version of [Osanda's IPObfuscator](https://github.com/OsandaMalith/IPObfuscator)
+It's a remastered version of
+[Osanda's IPObfuscator](https://github.com/OsandaMalith/IPObfuscator)
 with patch from [1lastBr3ath](https://github.com/1lastBr3ath).
 
-IPObfuscator now can be useful to create a wordlist of obfuscated IP's for ... your needs.
+ipobfs now can be useful to create a wordlist of obfuscated IP's for
+... your needs.
 Also it allows custom prefix and postfix for IP address.
 
 ## Usage
@@ -16,16 +18,17 @@ Also it allows custom prefix and postfix for IP address.
                                                                       
   Coded by       @OsandaMalith  (http://osandamalith.wordpress.com)   
                  @1lastBr3ath   (http://cm2.pw)                       
-  Remastered by  @chinarulezzz  (https://github.com/chinarulezzz)     
+  Remastered by  @sighook       (https://github.com/sighook)     
  ---------------------------------------------------------------------
-Usage: ./ip <ip> [prefix] [postfix]
+Usage: ./ipobfs <ip> [prefix] [postfix]
 ```
 ## Example
 
-Create obfuscated IP addresses for testing, for example, a bogon filtering:
+Create obfuscated IP addresses for testing, for example, a bogon
+filtering:
 
 ```
-./ip 127.0.0.1 https://
+./ipobfs 127.0.0.1 https://
 
 https://2130706433
 https://0x7F000001
@@ -55,3 +58,6 @@ https://0x7F.0000.1
 - Osanda Malith Jayathissa (https://github.com/OsandaMalith)
 
 - 1lastBr3ath              (https://github.com/1lastBr3ath)
+
+<!-- vim:sw=2:ts=2:sts=2:et:cc=72:tw=70
+End of file. -->
