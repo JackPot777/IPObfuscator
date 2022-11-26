@@ -12,16 +12,22 @@ Also it allows custom prefix and postfix for IP address.
 
 ## Usage
 
+```sh
+make
+./ipobfs -h
+```
+
 ```
  ---------------------------------------------------------------------
                  Welcome to IPObfuscator                              
                                                                       
   Coded by       @OsandaMalith  (http://osandamalith.wordpress.com)   
                  @1lastBr3ath   (http://cm2.pw)                       
-  Remastered by  @sighook       (https://github.com/sighook)     
+  Remastered by  @sighook       (https://github.com/sighook)          
  ---------------------------------------------------------------------
 Usage: ./ipobfs <ip> [prefix] [postfix]
 ```
+
 ## Example
 
 Create obfuscated IP addresses for testing, for example, a bogon
