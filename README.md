@@ -18,14 +18,12 @@ make
 ```
 
 ```
- ---------------------------------------------------------------------
-                 Welcome to IPObfuscator                              
-                                                                      
-  Coded by       @OsandaMalith  (http://osandamalith.wordpress.com)   
-                 @1lastBr3ath   (http://cm2.pw)                       
-  Remastered by  @sighook       (https://github.com/sighook)          
- ---------------------------------------------------------------------
-Usage: ./ipobfs <ip> [prefix] [postfix]
+Usage: ipobfs <ip> [prefix] [postfix]
+Convert the IP address to different obfuscated forms.
+
+coded by @OsandaMalith (http://osandamalith.wordpress.com),
+and @1lastBr3ath (http://cm2.pw), remastered by @sighook
+(https://github.com/sighook).
 ```
 
 ## Example
